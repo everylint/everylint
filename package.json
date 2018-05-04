@@ -13,11 +13,12 @@
   "license": "MIT",
   "dependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "stylelint": "^9.2.0",
-    "stylelint-config-standard": "^18.2.0"
+    "stylelint": "^9.2.0"
   },
   "devDependencies": {
     "eslint-config-uploadcare": "^1.1.0"
+  },
+  "optionalDependencies": {
+    "stylelint-config-standard": "^18.2.0"
   }
 }
