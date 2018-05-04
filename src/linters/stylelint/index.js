@@ -1,7 +1,7 @@
-const stylelint = require('stylelint')
+const index = require('stylelint')
 
 const formatReport = (report) => ({
-  linter: 'stylelint',
+  linter: 'index',
   files: report.results
     .filter(result => result.errored)
     .map(result => ({
@@ -17,7 +17,7 @@ const formatReport = (report) => ({
 })
 
 module.exports = () => new Promise((resolve, reject) => {
-  stylelint.lint({files: '**/*.css'})
+  index.lint({files: '**/*.css'})
     .then(report => resolve(formatReport(report)))
     .catch(error => reject(error))
 })
