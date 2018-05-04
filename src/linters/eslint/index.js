@@ -1,3 +1,4 @@
+const path = require('path')
 const CLIEngine = require('eslint').CLIEngine
 
 const SEVERITIES = {
@@ -22,7 +23,10 @@ const formatReport = (report) => ({
 })
 
 module.exports = (cwd) => {
-  const cli = new CLIEngine({cwd})
+  const cli = new CLIEngine({
+    configFile: path.join(__dirname, 'config.js'),
+    cwd,
+  })
 
   return new Promise((resolve, reject) => {
     try {
