@@ -1,4 +1,4 @@
-const stylelint = require('src/linters/stylelint')
+const stylelint = require('stylelint')
 
 const formatReport = (report) => ({
   linter: 'stylelint',

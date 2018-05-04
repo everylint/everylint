@@ -1,4 +1,4 @@
-const CLIEngine = require('src/linters/eslint').CLIEngine
+const CLIEngine = require('eslint').CLIEngine
 
 const SEVERITIES = {
   1: 'warning',
