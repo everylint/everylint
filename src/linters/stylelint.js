@@ -16,10 +16,8 @@ const formatReport = (report) => ({
     })),
 })
 
-module.exports = () => new Promise(resolve => {
-  stylelint.lint({
-    config: {extends: 'stylelint-config-standard'},
-    files: '**/*.css',
-  })
+module.exports = () => new Promise((resolve, reject) => {
+  stylelint.lint({files: '**/*.css'})
     .then(report => resolve(formatReport(report)))
+    .catch(error => reject(error))
 })

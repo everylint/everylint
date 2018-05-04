@@ -5,3 +5,4 @@ const cwd = process.cwd()
 
 Promise.all([eslint(cwd), stylelint()])
   .then(reports => console.log(JSON.stringify(reports)))
+  .catch(error => console.error(error.message))

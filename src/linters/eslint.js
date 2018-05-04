@@ -24,5 +24,14 @@ const formatReport = (report) => ({
 module.exports = (cwd) => {
   const cli = new CLIEngine({cwd})
 
-  return new Promise(resolve => resolve(formatReport(cli.executeOnFiles(['.']))))
+  return new Promise((resolve, reject) => {
+    try {
+      const report = cli.executeOnFiles(['.'])
+
+      resolve(formatReport(report))
+    }
+    catch (error) {
+      reject(error)
+    }
+  })
 }
