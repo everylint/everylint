@@ -27,5 +27,5 @@ npm link everylint
 Run
 
 ```
-npx eslint
+npx everylint
 ```
