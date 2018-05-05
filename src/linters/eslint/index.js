@@ -6,11 +6,11 @@ const SEVERITIES = {
   2: 'error',
 }
 
-const formatReport = (report) =>
+const formatReport = (report, basePath) =>
   report.results
     .filter(result => result.errorCount || result.warningCount)
     .map(result => ({
-      name: result.filePath,
+      name: result.filePath.substr(basePath.length + 1),
       messages: result.messages.map(message => ({
         linter: 'eslint',
         type: SEVERITIES[message.severity],
@@ -21,10 +21,10 @@ const formatReport = (report) =>
       })),
     }))
 
-module.exports = (cwd) => {
+module.exports = (basePath) => {
   const cli = new CLIEngine({
     baseConfig,
-    cwd,
+    cwd: basePath,
     extensions: ['.js', '.markdown', '.md', '.mdown', '.mkdn', '.html', '.htm'],
   })
 
@@ -32,7 +32,7 @@ module.exports = (cwd) => {
     try {
       const report = cli.executeOnFiles(['.'])
 
-      resolve(formatReport(report))
+      resolve(formatReport(report, basePath))
     }
     catch (error) {
       reject(error)

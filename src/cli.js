@@ -9,11 +9,11 @@ const STYLES = {
   eslint: chalk.hex('#00f'),
   stylelint: chalk.black,
 }
-const stylish = (text) => typeof STYLES[text] !== 'undefined' ? STYLES[text](text.padStart(10)) : text.padStart(10)
+const stylish = (text) => typeof STYLES[text] !== 'undefined' ? STYLES[text](text.padStart(12)) : text.padStart(12)
 
 const showReport = (files) => {
   files.forEach(file => {
-    console.log(chalk.bold.underline(file.name.substr(basePath.length + 1)))
+    console.log(chalk.bold.underline(file.name))
 
     file.messages.forEach(message => {
       const {linter, type, line, column, text} = message
