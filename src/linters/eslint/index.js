@@ -25,6 +25,7 @@ module.exports = (cwd) => {
   const cli = new CLIEngine({
     baseConfig,
     cwd,
+    extensions: ['.js', '.markdown', '.md', '.mdown', '.mkdn'],
   })
 
   return new Promise((resolve, reject) => {
