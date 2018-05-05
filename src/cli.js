@@ -1,6 +1,8 @@
 const everylint = require('./')
 const chalk = require('chalk')
 
+const basePath = process.cwd()
+
 const STYLES = {
   error: chalk.red,
   warning: chalk.yellow,
@@ -11,7 +13,7 @@ const stylish = (text) => typeof STYLES[text] !== 'undefined' ? STYLES[text](tex
 
 const showReport = (files) => {
   files.forEach(file => {
-    console.log(chalk.bold.underline(file.name))
+    console.log(chalk.bold.underline(file.name.substr(basePath.length + 1)))
 
     file.messages.forEach(message => {
       const {linter, type, line, column, text} = message
@@ -23,8 +25,6 @@ const showReport = (files) => {
   })
 }
 
-const cwd = process.cwd()
-
-everylint({basePath: cwd})
+everylint({basePath})
   .then(files => showReport(files))
   .catch(error => console.error(error.message))
