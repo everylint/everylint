@@ -4,8 +4,27 @@ const stylelint = require('./linters/stylelint')
 const everylint = ({basePath}) => new Promise((resolve, reject) => {
   Promise.all([eslint(basePath), stylelint()])
     .then(reports => {
-      const files = reports
-        .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+      let files = reports
+        .reduce((newFiles, report) => newFiles.concat(report), [])
+        .reduce((newFiles, currentFile) => {
+          const {name, messages} = currentFile
+          const fileWithSameNameIndex = newFiles.findIndex(file => file.name === name)
+
+          if (fileWithSameNameIndex === -1) {
+            newFiles.push({
+              name,
+              messages,
+            })
+          }
+          else {
+            newFiles[fileWithSameNameIndex].messages = [
+              ...newFiles[fileWithSameNameIndex].messages,
+              ...messages,
+            ]
+          }
+
+          return newFiles
+        }, [])
 
       resolve(files)
     })
