@@ -1,8 +1,13 @@
 const eslint = require('./linters/eslint')
 const stylelint = require('./linters/stylelint')
+const markdownlint = require('./linters/markdownlint')
 
 const everylint = ({basePath}) => new Promise((resolve, reject) => {
-  Promise.all([eslint(basePath), stylelint()])
+  Promise.all([
+    eslint(basePath),
+    stylelint(),
+    markdownlint(),
+  ])
     .then(reports => {
       let files = reports
         .reduce((newFiles, report) => newFiles.concat(report), [])
