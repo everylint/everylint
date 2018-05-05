@@ -19,7 +19,7 @@ const formatReport = (report) =>
 module.exports = () => new Promise((resolve, reject) => {
   stylelint.lint({
     configOverrides: baseConfig,
-    files: '**/*.css',
+    files: '**/*.(css|pcss|scss|sass|sss|less|html|htm|markdown|md|js|jsx)',
   })
     .then(report => resolve(formatReport(report)))
     .catch(error => reject(error))
