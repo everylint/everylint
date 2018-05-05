@@ -1,5 +1,8 @@
 const markdownlint = require('markdownlint')
 const globby = require('globby')
+const cosmiconfig = require('cosmiconfig')
+const configExplorer = cosmiconfig('markdownlint')
+const path = require('path')
 const baseConfig = require('./config')
 
 const formatReport = (report) => {
@@ -27,24 +30,62 @@ const formatReport = (report) => {
   return files
 }
 
-module.exports = () => new Promise((resolve, reject) => {
+module.exports = (basePath) => new Promise((resolve, reject) => {
   globby(['**/*.md', '**/*.markdown', '**/*.mdown', '**/*.mkdn', '!node_modules'])
     .then(files =>{
       if (files.length === 0) {
         resolve([])
       }
       else {
-        markdownlint({
-          files,
-          config: baseConfig,
-        }, (error, result) => {
-          if (error) {
-            reject(error)
-          }
-          else {
-            resolve(formatReport(result))
-          }
-        })
+        const filesByFolders = files
+          .reduce((folders, file) => {
+            const folderName = path.dirname(file)
+            const fullFolderName = basePath + path.sep + (folderName === '.' ? '' : folderName + path.sep)
+            const folderIndex = folders.findIndex(folder => folder.name === fullFolderName)
+
+            if (folderIndex === -1) {
+              folders.push({
+                name: fullFolderName,
+                files: [file],
+              })
+            }
+            else {
+              folders[folderIndex].files = [
+                ...folders[folderIndex].files,
+                file,
+              ]
+            }
+
+            return folders
+          }, [])
+        const filesByFoldersWithConfigs = filesByFolders
+          .map(folder => {
+            const folderConfig = configExplorer.searchSync(folder.name)
+
+            return Object.assign({}, folder, {config: folderConfig.config})
+          })
+
+        Promise.all(filesByFoldersWithConfigs
+          .map(folder => new Promise((resolve, reject) => {
+            markdownlint({
+              files: folder.files,
+              config: Object.assign({}, baseConfig, folder.config),
+            }, (error, result) => {
+              if (error) {
+                reject(error)
+              }
+              else {
+                resolve(result)
+              }
+            })
+          })))
+          .then(results => {
+            const report = results
+              .reduce((report, result) => Object.assign({}, report, result), {})
+
+            resolve(formatReport(report))
+          })
+          .catch(error => reject(error))
       }
     })
     .catch(error => reject(error))

@@ -6,7 +6,7 @@ const everylint = ({basePath}) => new Promise((resolve, reject) => {
   Promise.all([
     eslint(basePath),
     stylelint(basePath),
-    markdownlint(),
+    markdownlint(basePath),
   ])
     .then(reports => {
       let files = reports
