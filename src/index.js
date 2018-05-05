@@ -5,7 +5,7 @@ const markdownlint = require('./linters/markdownlint')
 const everylint = ({basePath}) => new Promise((resolve, reject) => {
   Promise.all([
     eslint(basePath),
-    stylelint(),
+    stylelint(basePath),
     markdownlint(),
   ])
     .then(reports => {
