@@ -1,5 +1,5 @@
-const path = require('path')
 const stylelint = require('stylelint')
+const baseConfig = require('./config')
 
 const formatReport = (report) =>
   report.results
@@ -18,8 +18,8 @@ const formatReport = (report) =>
 
 module.exports = () => new Promise((resolve, reject) => {
   stylelint.lint({
-    configFile: path.join(__dirname, 'config.js'),
-    files: '**/*.css',
+    configOverrides: baseConfig,
+    files: '**/*.(css|pcss|scss|sass|sss|less|html|htm|markdown|md|js|jsx)',
   })
     .then(report => resolve(formatReport(report)))
     .catch(error => reject(error))
