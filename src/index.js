@@ -1,25 +1,15 @@
 const eslint = require('./linters/eslint')
 const stylelint = require('./linters/stylelint')
 
-const cwd = process.cwd()
+const everylint = ({basePath}) => new Promise((resolve, reject) => {
+  Promise.all([eslint(basePath), stylelint()])
+    .then(reports => {
+      const files = reports
+        .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
 
-const showReport = (files) => {
-  files.forEach(file => {
-    console.log(file.name)
-
-    file.messages.forEach(message => {
-      const {linter, type, line, column, text} = message
-
-      console.log(`  ${linter} ${type} - ${line}:${column} ${text}`)
+      resolve(files)
     })
-  })
-}
+    .catch(error => reject(error))
+})
 
-Promise.all([eslint(cwd), stylelint()])
-  .then(reports => {
-    const files = reports
-      .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
-
-    showReport(files)
-  })
-  .catch(error => console.error(error.message))
+module.exports = everylint

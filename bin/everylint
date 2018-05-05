@@ -3,4 +3,4 @@
 
 process.title = 'everylint'
 
-require('../src/')
+require('../src/cli')
