@@ -8,5 +8,5 @@ module.exports = {
     node: true,
   },
   extends: 'eslint:recommended',
-  plugins: ['markdown'],
+  plugins: ['markdown', 'html'],
 }
