@@ -1,5 +1,5 @@
-const path = require('path')
 const CLIEngine = require('eslint').CLIEngine
+const baseConfig = require('./config')
 
 const SEVERITIES = {
   1: 'warning',
@@ -23,7 +23,7 @@ const formatReport = (report) =>
 
 module.exports = (cwd) => {
   const cli = new CLIEngine({
-    configFile: path.join(__dirname, 'config.js'),
+    baseConfig,
     cwd,
   })
 
