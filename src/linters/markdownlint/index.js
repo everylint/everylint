@@ -1,5 +1,6 @@
 const markdownlint = require('markdownlint')
 const globby = require('globby')
+const baseConfig = require('./config')
 
 const formatReport = (report) => {
   let files = []
@@ -35,7 +36,7 @@ module.exports = () => new Promise((resolve, reject) => {
       else {
         markdownlint({
           files,
-          config: {default: true},
+          config: baseConfig,
         }, (error, result) => {
           if (error) {
             reject(error)
