@@ -18,7 +18,7 @@ const formatReport = (report, basePath) =>
 
 module.exports = (basePath) => new Promise((resolve, reject) => {
   stylelint.lint({
-    configOverrides: baseConfig,
+    config: baseConfig,
     files: '**/*.(css|pcss|scss|sass|sss|less|html|htm|markdown|md|mdown|mkdn|js|jsx)',
   })
     .then(report => resolve(formatReport(report, basePath)))
