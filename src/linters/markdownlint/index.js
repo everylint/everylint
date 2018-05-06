@@ -62,7 +62,7 @@ module.exports = (basePath) => new Promise((resolve, reject) => {
           .map(folder => {
             const folderConfig = configExplorer.searchSync(folder.name)
 
-            return Object.assign({}, folder, {config: folderConfig.config})
+            return Object.assign({}, folder, {config: folderConfig ? folderConfig.config : {}})
           })
 
         Promise.all(filesByFoldersWithConfigs
