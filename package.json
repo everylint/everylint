@@ -1,16 +1,28 @@
 {
   "name": "everylint",
   "version": "0.0.0",
-  "description": "Linter for everything frontend parts.",
+  "description": "One linter to check all frontend parts",
   "main": "./src/index.js",
   "bin": {
     "everylint": "./bin/everylint"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "node ./src/cli",
+    "test": "npm run lint"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   },
   "author": "Zarema Khalilova",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/everylint/everylint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/everylint/everylint/issues"
+  },
+  "homepage": "https://github.com/everylint/everylint#readme",
   "dependencies": {
     "chalk": "^2.4.1",
     "cosmiconfig": "^5.0.1",
