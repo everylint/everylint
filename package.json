@@ -1,6 +1,6 @@
 {
   "name": "everylint",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "One linter to check all frontend parts",
   "main": "./src/index.js",
   "bin": {
