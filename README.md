@@ -57,4 +57,4 @@ Sponsored by
 [eslint]: https://github.com/eslint/eslint
 [stylelint]: https://github.com/stylelint/stylelint
 [markdownlint]: https://github.com/DavidAnson/markdownlint
-[everylint-demo-img]: https://ucarecdn.com/26b4452c-ba3d-44ee-b611-71881fb24022/-/crop/2000x1000/55,140/-/setfill/f6f9fa/-/crop/2100x1100/center/-/resize/1600x/-/format/jpg/-/quality/lightest/
+[everylint-demo-img]: https://ucarecdn.com/26b4452c-ba3d-44ee-b611-71881fb24022/-/crop/2000x1000/55,140/-/setfill/ddd/-/crop/2100x1100/center/-/resize/1600x/-/format/jpg/-/quality/lighter/
