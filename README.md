@@ -10,6 +10,8 @@ and [markdownlint][markdownlint].
 [npm-img]: http://img.shields.io/npm/v/everylint.svg
 [npm-url]: https://www.npmjs.org/package/everylint
 
+![Everylint show results for all linters for all files to the console report][everylint-demo-img]
+
 ## Install
 
 ```bash
@@ -52,3 +54,8 @@ Sponsored by
        src="https://ucarecdn.com/74c4d283-f7cf-45d7-924c-fc77345585af/uclogohorizontal.svg"
        alt="Uploadcare">
 </a>
+
+[eslint]: https://github.com/eslint/eslint
+[stylelint]: https://github.com/stylelint/stylelint
+[markdownlint]: https://github.com/DavidAnson/markdownlint
+[everylint-demo-img]: https://ucarecdn.com/26b4452c-ba3d-44ee-b611-71881fb24022/-/crop/2000x1000/55,140/-/setfill/ccc/-/crop/2100x1100/center/-/resize/1600x/-/format/jpg/-/quality/lightest/
