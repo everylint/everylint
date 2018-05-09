@@ -24,10 +24,16 @@
   },
   "homepage": "https://github.com/everylint/everylint#readme",
   "dependencies": {
+    "commander": "^2.15.1",
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "globby": "^8.0.1",
+    "remark": "^9.0.0",
+    "remark-preset-lint-markdown-style-guide": "^2.1.1",
+    "stylelint": "^9.2.0",
+    "to-vfile": "^4.0.0",
+    "vfile-reporter-pretty": "^1.0.2"
   },
   "optionalDependencies": {
     "stylelint-config-standard": "^18.2.0"

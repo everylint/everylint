@@ -1,6 +1,52 @@
 #!/usr/bin/env node
-'use strict'
 
-process.title = 'everylint'
+'use strict';
 
-require('../src/cli')
+const program = require('commander');
+const globby = require('globby');
+const fs = require('fs');
+const pkg = require('../package');
+
+// Array of possible errors
+const errors = [];
+
+// Indicates whether a given path is ignored via a .gitignore file.
+const isIgnored = globby.gitignore.sync();
+
+// TODO: Add more options to program
+
+program
+  .version(pkg.version, '-v, --version')
+  .usage('[options] <files ...>')
+  .parse(process.argv);
+
+const filenames = program.args
+  .reduce((globbed, arg) => {
+    const matched = globby.sync(arg);
+    const files = matched.length ? matched : [arg];
+    return globbed.concat(files);
+  }, [])
+  .filter(file => !isIgnored(file));
+
+// FIXME: Keep only uniq files
+
+// Collect errors for files that does not exist
+filenames.forEach(filename => {
+  if (!fs.existsSync(filename)) {
+    errors.push(filename + ' does not exist!');
+  }
+});
+
+// If there's nothing to lint, create an error
+if (filenames.length === 0) {
+  errors.push('No files to lint!');
+}
+
+// If there are some errors, exit the process
+if (errors.length) {
+  console.error(errors.join('\n'));
+  process.exit(2);
+}
+
+// FIXME: Create more descriptive external Node.js API
+require('../lib')(filenames);
