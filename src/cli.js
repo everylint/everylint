@@ -45,7 +45,7 @@ const showReport = (files) => {
     process.exitCode = 2
   }
 
-  process.stdout.write(`\nFounded ${chalk.red(pluralize('error', errorsCount, true))}`)
+  process.stdout.write(`\nFound ${chalk.red(pluralize('error', errorsCount, true))}`)
   process.stdout.write(` and ${chalk.yellow(pluralize('warning', warningsCount, true))}`)
   process.stdout.write(` in ${pluralize('file', files.length, true)}\n\n`)
 }
