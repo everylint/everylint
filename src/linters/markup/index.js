@@ -14,3 +14,23 @@ module.exports = (file) => new Promise((resolve, reject) => {
     })
     .catch(reason => reject(reason));
 });
+
+// class MarkdownLinter {
+//   static type = 'docs';
+
+//   constructor() {
+//     // linter setup
+//   }
+
+//   checkType() {
+//     // check if file matches linter type
+//   }
+
+//   async lint(file) {
+//     // return file with messages
+//   }
+
+//   async fix(file) {
+//     // return fixes file
+//   }
+// }
