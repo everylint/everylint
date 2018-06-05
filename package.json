@@ -8,10 +8,12 @@
   },
   "scripts": {
     "lint": "node ./src/cli",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "compile": "babel -d lib src",
+    "compile:watch": "npm run compile -- --watch"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=6.0.0"
   },
   "author": "Zarema Khalilova",
   "license": "MIT",
@@ -38,5 +40,9 @@
   },
   "optionalDependencies": {
     "stylelint-config-standard": "^18.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
