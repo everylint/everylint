@@ -7,7 +7,7 @@
     "everylint": "./bin/everylint"
   },
   "scripts": {
-    "lint": "node ./src/cli",
+    "lint": "node ./bin/everylint .",
     "test": "npm run lint",
     "compile": "babel -d lib src",
     "compile:watch": "npm run compile -- --watch"
