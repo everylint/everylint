@@ -36,7 +36,7 @@
     "remark-preset-lint-markdown-style-guide": "^2.1.1",
     "stylelint": "^9.2.0",
     "to-vfile": "^4.0.0",
-    "vfile-reporter-pretty": "^1.0.2"
+    "vfile-reporter": "^5.0.0"
   },
   "optionalDependencies": {
     "stylelint-config-standard": "^18.2.0"
