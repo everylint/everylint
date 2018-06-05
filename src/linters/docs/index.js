@@ -1,7 +1,7 @@
-const remark = require('remark');
-const styleGuide = require('remark-preset-lint-markdown-style-guide');
+import remark from 'remark';
+import styleGuide from 'remark-preset-lint-markdown-style-guide';
 
-module.exports = (file) => new Promise((resolve, reject) => {
+export default (file) => new Promise((resolve, reject) => {
   try {
     const report = remark().use(styleGuide).process(file);
     return resolve(report);

@@ -1,9 +1,9 @@
-const vfile = require('to-vfile');
-const scriptsLinter = require('./linters/scripts');
-const stylesLinter = require('./linters/styles');
-const docsLinter = require('./linters/docs');
-const markupLinter = require('./linters/markup');
-const reporter = require('vfile-reporter-pretty');
+import vfile from 'to-vfile';
+import scriptsLinter from './linters/scripts';
+import stylesLinter from './linters/styles';
+import docsLinter from './linters/docs';
+import markupLinter from './linters/markup';
+import reporter from 'vfile-reporter';
 
 // FIXME: In future we need to add ability to define custom types
 // FIXME: and assign them to files
@@ -44,7 +44,7 @@ function lint(file) {
     .catch(reason => console.error(reason));
 }
 
-function run(filenames) {
+export default function run(filenames) {
   // TODO: Create an abstraction, like SourceFile extending VFile
   const tasks = filenames
     // Read files, convert them to VFile
@@ -59,5 +59,3 @@ function run(filenames) {
     .then(report => console.log(reporter(report)))
     .catch(reason => console.error(reason));
 }
-
-module.exports = run;

@@ -1,5 +1,5 @@
-const stylelint = require('stylelint');
-const baseConfig = require('./config');
+import stylelint from 'stylelint';
+import baseConfig from './config';
 
 const linter = (content, path) => stylelint.lint({
   config: baseConfig,
@@ -7,7 +7,7 @@ const linter = (content, path) => stylelint.lint({
   codeFilename: path,
 });
 
-module.exports = (file) => new Promise((resolve, reject) => {
+export default (file) => new Promise((resolve, reject) => {
   linter(file.toString(), file.path)
     .then(report => {
       const { errored, results: [result] } = report;

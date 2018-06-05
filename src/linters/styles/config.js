@@ -8,4 +8,4 @@ try {
   console.error(error);
 }
 
-module.exports = config
+export default config;

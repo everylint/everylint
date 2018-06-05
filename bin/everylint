@@ -6,6 +6,7 @@ const program = require('commander');
 const globby = require('globby');
 const fs = require('fs');
 const pkg = require('../package');
+const everylint = require('../lib').default;
 
 // Array of possible errors
 const errors = [];
@@ -49,4 +50,4 @@ if (errors.length) {
 }
 
 // FIXME: Create more descriptive external Node.js API
-require('../lib')(filenames);
+everylint(filenames);

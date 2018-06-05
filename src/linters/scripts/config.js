@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',

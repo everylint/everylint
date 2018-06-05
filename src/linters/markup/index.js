@@ -1,8 +1,8 @@
-const htmllint = require('htmllint');
+import htmllint from 'htmllint';
 
 const linter = (content) => htmllint(content);
 
-module.exports = (file) => new Promise((resolve, reject) => {
+export default (file) => new Promise((resolve, reject) => {
   linter(file.toString())
     .then(report => {
       // FIXME: htmllint uses unreadable codes for rules.

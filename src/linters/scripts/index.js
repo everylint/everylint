@@ -1,5 +1,5 @@
-const CLIEngine = require('eslint').CLIEngine;
-const baseConfig = require('./config');
+import { CLIEngine } from 'eslint';
+import baseConfig from './config';
 
 // TODO: Pass custom configuration to CLIEngine
 const eslint = new CLIEngine({ baseConfig });
@@ -9,7 +9,7 @@ const linter = (content, path) => {
   return report;
 };
 
-module.exports = (file) => new Promise((resolve, reject) => {
+export default (file) => new Promise((resolve, reject) => {
   try {
     const report = linter(file.toString(), file.path);
 
