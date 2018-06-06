@@ -2,35 +2,13 @@ import htmllint from 'htmllint';
 
 const linter = (content) => htmllint(content);
 
-export default (file) => new Promise((resolve, reject) => {
-  linter(file.toString())
-    .then(report => {
-      // FIXME: htmllint uses unreadable codes for rules.
-      report.forEach(({ code, line, column, rule }) => {
-        file.message(code, { line, column }, rule);
-      });
+export default async function (file) {
+  const report = linter(file.toString());
 
-      resolve(file);
-    })
-    .catch(reason => reject(reason));
-});
+  // FIXME: htmllint uses unreadable codes for rules.
+  report.forEach(({ code, line, column, rule }) => {
+    file.message(code, { line, column }, rule);
+  });
 
-// class MarkdownLinter {
-//   static type = 'docs';
-
-//   constructor() {
-//     // linter setup
-//   }
-
-//   checkType() {
-//     // check if file matches linter type
-//   }
-
-//   async lint(file) {
-//     // return file with messages
-//   }
-
-//   async fix(file) {
-//     // return fixes file
-//   }
-// }
+  return file;
+}
