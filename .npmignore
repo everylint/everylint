@@ -1,4 +1,5 @@
+src
 .idea
+.babelrc
 .editorconfig
 .eslintrc.json
-.markdownlintrc
