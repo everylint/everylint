@@ -13,9 +13,18 @@ export default (file) => new Promise((resolve, reject) => {
       const { errored, results: [result] } = report;
 
       if (errored) {
-        result.warnings.forEach(({ text, line, column, rule }) => {
+        result.warnings.forEach(({ text, line, column, rule, severity }) => {
           // FIXME: use message/info/fail for different types of severities
-          file.message(text, { line, column }, rule);
+          if (severity === 'warning') {
+            file.message(text, { line, column }, rule);
+          }
+          if (severity === 'error') {
+            try {
+              file.fail(text, { line, column }, rule);
+            } catch (e) {
+              // ...
+            }
+          }
         });
       }
 
