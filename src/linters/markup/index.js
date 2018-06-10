@@ -1,21 +1,36 @@
 import { HTMLHint } from 'htmlhint';
 
-const linter = (content) => HTMLHint.verify(content);
+export default class MarkupLinter {
+  static type = 'markup';
 
-export default async function (file) {
-  const report = linter(file.toString());
+  constructor(/* config */) {
+    this.linter = (content) => HTMLHint.verify(content);
+  }
 
-  report.forEach(({ message, line, col: column, rule: { id: ruleId }, type }) => {
-    if (type === 'error') {
-      try {
-        file.fail(message, { line, column }, ruleId);
-      } catch (e) {
-        // ...
+  matchType(file) {
+    const types = ['.html'];
+    return types.includes(file.extname);
+  }
+
+  async lint(file) {
+    const report = this.linter(file.toString());
+
+    report.forEach(({ message, line, col: column, rule: { id: ruleId }, type }) => {
+      if (type === 'error') {
+        try {
+          file.fail(message, { line, column }, ruleId);
+        } catch (e) {
+          // ...
+        }
+      } else {
+        file.message(message, { line, column }, ruleId);
       }
-    } else {
-      file.message(message, { line, column }, ruleId);
-    }
-  });
+    });
 
-  return file;
+    return file;
+  }
+
+  async fix(/* file */) {
+    // return fixed file
+  }
 }
