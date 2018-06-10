@@ -5,5 +5,9 @@
         "node": "6.0.0"
       }
     }]
+  ],
+  "plugins": [
+    ["transform-class-properties", { "spec": true }],
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }
