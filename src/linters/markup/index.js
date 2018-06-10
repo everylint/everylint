@@ -1,13 +1,20 @@
-import htmllint from 'htmllint';
+import { HTMLHint } from 'htmlhint';
 
-const linter = (content) => htmllint(content);
+const linter = (content) => HTMLHint.verify(content);
 
 export default async function (file) {
   const report = linter(file.toString());
 
-  // FIXME: htmllint uses unreadable codes for rules.
-  report.forEach(({ code, line, column, rule }) => {
-    file.message(code, { line, column }, rule);
+  report.forEach(({ message, line, col: column, rule: { id: ruleId }, type }) => {
+    if (type === 'error') {
+      try {
+        file.fail(message, { line, column }, ruleId);
+      } catch (e) {
+        // ...
+      }
+    } else {
+      file.message(message, { line, column }, ruleId);
+    }
   });
 
   return file;
