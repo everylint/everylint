@@ -8,6 +8,15 @@ const fs = require('fs');
 const pkg = require('../package');
 const everylint = require('../lib').default;
 
+function handleUnexpectedError(err) {
+  console.error('\nOops! Something went wrong! :(');
+  console.error(err);
+  process.exit(2);
+}
+
+process.once('uncaughtException', handleUnexpectedError);
+process.once('unhandledRejection', handleUnexpectedError);
+
 // Array of possible errors
 const errors = [];
 
