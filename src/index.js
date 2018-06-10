@@ -17,35 +17,50 @@ function loadLinters() {
     }), {});
 }
 
+function readFile(file) {
+  return vfile.readSync(file);
+}
+
+function createTypesMatcher(linters) {
+  return (file) => {
+    const meta = Object.entries(linters)
+      .reduce((metas, [name, linter]) => ({
+        ...metas,
+        [name]: linter.matchType(file),
+      }), {});
+
+    file.data = { ...file.data, ...meta };
+
+    return file;
+  };
+}
+
+function createFilesLinter(linters) {
+  return (file) => {
+    const jobs = Object.entries(file.data)
+      .filter(([type, enabled]) => enabled)
+      .map(([type]) => type)
+      .reduce(async (promise, type) => {
+        const file = await promise;
+        return linters[type].lint(file);
+      } , Promise.resolve(file));
+
+    return Promise.resolve(jobs);
+  };
+}
+
 export default function run(filenames) {
   const linters = loadLinters();
+  const matchTypes = createTypesMatcher(linters);
+  const lintFiles = createFilesLinter(linters);
 
   // TODO: Create an abstraction, like SourceFile extending VFile
   const tasks = filenames
     // Read files, convert them to VFile
-    .map(file => vfile.readSync(file))
+    .map(file => readFile(file))
     // Custom types
-    .map(file => {
-      const meta = Object.entries(linters)
-        .reduce((metas, [name, linter]) => ({
-          ...metas,
-          [name]: linter.matchType(file),
-        }), {});
-
-      file.data = { ...file.data, ...meta };
-
-      return file;
-    })
-    .map((file) => {
-      const jobs = Object.entries(file.data)
-        .filter(([type, enabled]) => enabled)
-        .map(([type]) => type)
-        .reduce(
-          (promise, type) => promise.then(file => linters[type].lint(file))
-          , Promise.resolve(file));
-
-      return Promise.resolve(jobs);
-    });
+    .map(file => matchTypes(file))
+    .map(file => lintFiles(file));
 
   Promise.all(tasks)
     .then(report => console.log(reporter(report)))
