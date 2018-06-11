@@ -1,4 +1,5 @@
-import vfile from 'to-vfile';
+// import vfile from 'to-vfile';
+import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
 
 function loadLinters() {
@@ -17,8 +18,8 @@ function loadLinters() {
     }), {});
 }
 
-function readFile(file) {
-  return vfile.readSync(file);
+function readFile(path) {
+  return SourceFile.readSync(path);
 }
 
 function createTypesMatcher(linters) {
@@ -49,7 +50,7 @@ function createFilesLinter(linters) {
   };
 }
 
-export default function run(filenames) {
+export default async function run(filenames) {
   const linters = loadLinters();
   const matchTypes = createTypesMatcher(linters);
   const lintFiles = createFilesLinter(linters);
@@ -62,7 +63,10 @@ export default function run(filenames) {
     .map(file => matchTypes(file))
     .map(file => lintFiles(file));
 
-  Promise.all(tasks)
-    .then(report => console.log(reporter(report)))
-    .catch(error => console.error(error));
+  try {
+    const report = await Promise.all(tasks);
+    console.log(reporter(report));
+  } catch (error) {
+    console.error(error);
+  }
 }

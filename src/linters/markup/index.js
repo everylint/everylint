@@ -17,13 +17,9 @@ export default class MarkupLinter {
 
     report.forEach(({ message, line, col: column, rule: { id: ruleId }, type }) => {
       if (type === 'error') {
-        try {
-          file.fail(message, { line, column }, ruleId);
-        } catch (e) {
-          // ...
-        }
+        file.error(message, { line, column }, ruleId);
       } else {
-        file.message(message, { line, column }, ruleId);
+        file.warning(message, { line, column }, ruleId);
       }
     });
 

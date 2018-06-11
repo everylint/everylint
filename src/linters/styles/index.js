@@ -22,17 +22,7 @@ export default class StyleLinter {
 
     if (errored) {
       result.warnings.forEach(({ text, line, column, rule, severity }) => {
-        // FIXME: use message/info/fail for different types of severities
-        if (severity === 'warning') {
-          file.message(text, { line, column }, rule);
-        }
-        if (severity === 'error') {
-          try {
-            file.fail(text, { line, column }, rule);
-          } catch (e) {
-            // ...
-          }
-        }
+        file[severity](text, { line, column }, rule);
       });
     }
 

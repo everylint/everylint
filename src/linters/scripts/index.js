@@ -1,6 +1,12 @@
 import { CLIEngine } from 'eslint';
 import baseConfig from './config';
 
+const fatalities = {
+  2: 'error',
+  1: 'warning',
+  0: 'info'
+}
+
 export default class JavaScriptLinter {
   static type = 'javascript';
 
@@ -17,16 +23,8 @@ export default class JavaScriptLinter {
     const [report] = this.linter.executeOnText(file.toString(), file.path).results;
 
     report.messages.forEach(({ message, line, column, ruleId, severity }) => {
-      // FIXME: use message/info/fail for different types of severities
-      if (severity === 2) {
-        try {
-          file.fail(message, { line, column }, ruleId);
-        } catch (e) {
-          // ...
-        }
-      } else {
-        file.message(message, { line, column }, ruleId);
-      }
+      const level = fatalities[severity];
+      file[level](message, { line, column }, ruleId);
     });
 
     return file;
