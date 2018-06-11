@@ -1,16 +1,10 @@
 // import vfile from 'to-vfile';
 import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
+import defaultLinters from './linters';
 
 function loadLinters() {
-  const paths = [
-    './linters/scripts',
-    './linters/styles',
-    './linters/docs',
-    './linters/markup',
-  ];
-
-  return paths
+  return defaultLinters
     .map(path => require(path))
     .reduce((linters, { default: Linter }) => ({
       ...linters,
