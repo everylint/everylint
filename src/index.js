@@ -5,8 +5,7 @@ import defaultLinters from './linters';
 
 function loadLinters() {
   return defaultLinters
-    .map(path => require(path))
-    .reduce((linters, { default: Linter }) => ({
+    .reduce((linters, Linter) => ({
       ...linters,
       [Linter.type]: new Linter(),
     }), {});

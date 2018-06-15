@@ -1,6 +1,11 @@
+import docs from './docs';
+import markup from './markup';
+import scripts from './scripts';
+import styles from './styles';
+
 export default [
-  './scripts',
-  './styles',
-  './docs',
-  './markup',
+  docs,
+  markup,
+  scripts,
+  styles,
 ];
