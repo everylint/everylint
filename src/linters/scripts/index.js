@@ -1,17 +1,17 @@
 import { CLIEngine } from 'eslint';
-import baseConfig from './config';
+import defaultConfig from './config';
 
 const fatalities = {
   2: 'error',
   1: 'warning',
   0: 'info'
-}
+};
 
 export default class JavaScriptLinter {
   static type = 'javascript';
 
-  constructor(/* config */) {
-    this.linter = new CLIEngine({ baseConfig });
+  constructor(config) {
+    this.linter = new CLIEngine({ ...defaultConfig, ...config });
   }
 
   matchType(file) {

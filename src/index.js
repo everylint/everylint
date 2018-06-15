@@ -1,18 +1,18 @@
-// import vfile from 'to-vfile';
+import cosmiconfig from 'cosmiconfig';
 import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
 import defaultLinters from './linters';
 
-function loadLinters() {
+function loadLinters(config) {
   return defaultLinters
     .reduce((linters, Linter) => ({
       ...linters,
-      [Linter.type]: new Linter(),
+      [Linter.type]: new Linter(config[Linter.type]),
     }), {});
 }
 
 function readFile(path) {
-  return SourceFile.readSync(path);
+  return SourceFile.readFileSync(path);
 }
 
 function createTypesMatcher(linters) {
@@ -43,8 +43,13 @@ function createFilesLinter(linters) {
   };
 }
 
+async function resolveConfig() {
+  return await cosmiconfig('everylint').search();
+}
+
 export default async function run(filenames) {
-  const linters = loadLinters();
+  const { config } = await resolveConfig();
+  const linters = loadLinters(config);
   const matchTypes = createTypesMatcher(linters);
   const lintFiles = createFilesLinter(linters);
 
