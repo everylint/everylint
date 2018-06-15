@@ -2,10 +2,9 @@
 
 'use strict';
 
-const program = require('commander');
+const meow = require('meow');
 const globby = require('globby');
 const fs = require('fs');
-const pkg = require('../package');
 const everylint = require('../lib').default;
 
 function handleUnexpectedError(err) {
@@ -24,13 +23,18 @@ const errors = [];
 const isIgnored = globby.gitignore.sync();
 
 // TODO: Add more options to program
+const help = `
+  Lint everything with everylint
+`;
 
-program
-  .version(pkg.version, '-v, --version')
-  .usage('[options] <files ...>')
-  .parse(process.argv);
+const cli = meow({
+  help,
+  flags: {
+    fix: 'boolean',
+  }
+});
 
-const filenames = program.args
+const filenames = cli.input
   .reduce((globbed, arg) => {
     const matched = globby.sync(arg);
     const files = matched.length ? matched : [arg];
