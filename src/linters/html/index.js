@@ -1,7 +1,7 @@
 import { HTMLHint } from 'htmlhint';
 
-export default class MarkupLinter {
-  static type = 'markup';
+export default class HTMLLinter {
+  static type = 'html';
 
   constructor(/* config */) {
     this.linter = (content) => HTMLHint.verify(content);

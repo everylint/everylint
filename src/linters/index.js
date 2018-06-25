@@ -1,11 +1,11 @@
-import docs from './docs';
-import markup from './markup';
-import scripts from './scripts';
-import styles from './styles';
+import html from './html';
+import javascript from './javascript';
+import markdown from './markdown';
+import style from './style';
 
 export default [
-  docs,
-  markup,
-  scripts,
-  styles,
+  html,
+  javascript,
+  markdown,
+  style,
 ];
