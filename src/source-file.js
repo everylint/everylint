@@ -1,5 +1,8 @@
 import fs from 'fs';
+import promisify from 'pify';
 import VFile from 'vfile';
+
+const fsP = promisify(fs);
 
 export default class SourceFile extends VFile {
   static readFileSync(path) {
@@ -7,13 +10,9 @@ export default class SourceFile extends VFile {
     return new SourceFile({ path, contents });
   }
 
-  static readFile(path) {
-    return new Promise((resolve, reject) => {
-      fs.readFile(path, 'utf8', (err, content) => {
-        if (err) return reject(err);
-        return resolve(content);
-      });
-    });
+  static async readFile(path) {
+    const contents = await fsP.readFile(path, 'utf8');
+    return new SourceFile({ path, contents });
   }
 
   warning(...args) {
