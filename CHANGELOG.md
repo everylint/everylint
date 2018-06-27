@@ -11,6 +11,6 @@ Initial public release
 
 ### Added
 
-* Linting of JavaScript in js, markdown, and HTML files with ESLint.
-* Linting of style in css, markdown, and HTML files with stylelint.
-* Linting of markdown in markdown files with markdownlint.
+- Linting of JavaScript in js, markdown, and HTML files with ESLint.
+- Linting of style in css, markdown, and HTML files with stylelint.
+- Linting of markdown in markdown files with markdownlint.

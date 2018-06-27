@@ -5,11 +5,13 @@ import reporter from 'vfile-reporter';
 import defaultLinters from './linters';
 
 function loadLinters(config) {
-  return defaultLinters
-    .reduce((linters, Linter) => ({
+  return defaultLinters.reduce(
+    (linters, Linter) => ({
       ...linters,
       [Linter.type]: new Linter(config[Linter.type]),
-    }), {});
+    }),
+    {},
+  );
 }
 
 function readFile(path) {
@@ -17,11 +19,15 @@ function readFile(path) {
 }
 
 function createTypesMatcher(linters) {
-  return (file) => {
-    const meta = _.reduce(linters, (metas, linter, name) => ({
-      ...metas,
-      [name]: linter.matchType(file),
-    }), {});
+  return file => {
+    const meta = _.reduce(
+      linters,
+      (metas, linter, name) => ({
+        ...metas,
+        [name]: linter.matchType(file),
+      }),
+      {},
+    );
 
     file.data = { ...file.data, ...meta };
 
@@ -30,14 +36,14 @@ function createTypesMatcher(linters) {
 }
 
 function createFilesLinter(linters) {
-  return (file) => {
+  return file => {
     const jobs = Object.entries(file.data)
       .filter(([type, enabled]) => enabled)
       .map(([type]) => type)
       .reduce(async (promise, type) => {
         const file = await promise;
         return linters[type].lint(file);
-      } , Promise.resolve(file));
+      }, Promise.resolve(file));
 
     return Promise.resolve(jobs);
   };

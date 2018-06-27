@@ -4,7 +4,7 @@ import defaultConfig from './config';
 const fatalities = {
   2: 'error',
   1: 'warning',
-  0: 'info'
+  0: 'info',
 };
 
 export default class JavaScriptLinter {
@@ -15,14 +15,25 @@ export default class JavaScriptLinter {
   }
 
   matchType(file) {
-    const types = ['.js', '.markdown', '.md', '.mdown', '.mkdn', '.html', '.htm'];
+    const types = [
+      '.js',
+      '.markdown',
+      '.md',
+      '.mdown',
+      '.mkdn',
+      '.html',
+      '.htm',
+    ];
     return types.includes(file.extname);
   }
 
   async lint(file) {
-    const [report] = this.linter.executeOnText(file.toString(), file.path).results;
+    const [report] = this.linter.executeOnText(
+      file.toString(),
+      file.path,
+    ).results;
 
-    report.messages.forEach((problem) => {
+    report.messages.forEach(problem => {
       const { message, line, column, ruleId, severity } = problem;
       //  column - the column on which the error occurred.
       //  fatal - usually omitted, but will be set to true if there’s a parsing error (not related to a rule).

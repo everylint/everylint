@@ -5,24 +5,43 @@ export default class StyleLinter {
   static type = 'style';
 
   constructor(/* config */) {
-    this.linter = (content, path) => stylelint.lint({
-      config: baseConfig,
-      code: content,
-      codeFilename: path,
-    });
+    this.linter = (content, path) =>
+      stylelint.lint({
+        config: baseConfig,
+        code: content,
+        codeFilename: path,
+      });
   }
 
   matchType(file) {
-    const types = ['.css', '.pcss', '.scss', '.sass', '.sss', '.less', '.html', '.htm', '.markdown', '.md', '.mdown', 'mkdn', 'js', '.jsx'];
+    const types = [
+      '.css',
+      '.pcss',
+      '.scss',
+      '.sass',
+      '.sss',
+      '.less',
+      '.html',
+      '.htm',
+      '.markdown',
+      '.md',
+      '.mdown',
+      'mkdn',
+      'js',
+      '.jsx',
+    ];
     return types.includes(file.extname);
   }
 
   async lint(file) {
-    const { errored, results: [result] } = await this.linter(file.toString(), file.path);
+    const {
+      errored,
+      results: [result],
+    } = await this.linter(file.toString(), file.path);
 
     if (errored) {
       // result.warnings.forEach(({ text, line, column, rule, severity }) => {
-      result.warnings.forEach((problem) => {
+      result.warnings.forEach(problem => {
         const { text, line, column, rule, severity } = problem;
         // { line: 2,
         //   column: 3,

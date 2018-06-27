@@ -32,16 +32,16 @@ export default {
     'comma-dangle': 'off',
     'comma-spacing': 'off',
     'comma-style': 'off',
-    'complexity': 'off',
+    complexity: 'off',
     'computed-property-spacing': 'off',
     'consistent-return': 'warn',
     'constructor-super': 'error',
-    'curly': 'off',
+    curly: 'off',
     'default-case': 'off',
     'dot-location': 'off',
     'dot-notation': 'warn',
     'eol-last': 'off',
-    'eqeqeq': ['error', 'always', { null: 'ignore' }],
+    eqeqeq: ['error', 'always', { null: 'ignore' }],
     'for-direction': 'error',
     'func-call-spacing': 'off',
     'function-paren-newline': 'off',
@@ -52,7 +52,7 @@ export default {
     'handle-callback-err': ['error', '^(err|error)$'],
     'implicit-arrow-linebreak': 'off',
     'indent-legacy': 'off',
-    'indent': 'off',
+    indent: 'off',
     'jsx-quotes': 'off',
     'key-spacing': 'off',
     'keyword-spacing': 'off',
@@ -152,9 +152,22 @@ export default {
     'no-unreachable': 'error',
     'no-unsafe-finally': 'error',
     'no-unsafe-negation': 'error',
-    'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true, allowTaggedTemplates: true }],
-    'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: true }],
-    'no-use-before-define': ['error',{ functions: false, classes: false, variables: false}],
+    'no-unused-expressions': [
+      'error',
+      {
+        allowShortCircuit: true,
+        allowTernary: true,
+        allowTaggedTemplates: true,
+      },
+    ],
+    'no-unused-vars': [
+      'error',
+      { vars: 'all', args: 'none', ignoreRestSiblings: true },
+    ],
+    'no-use-before-define': [
+      'error',
+      { functions: false, classes: false, variables: false },
+    ],
     'no-useless-call': 'error',
     'no-useless-computed-key': 'error',
     'no-useless-concat': 'error',
@@ -174,12 +187,12 @@ export default {
     'padded-blocks': 'off',
     'prefer-promise-reject-errors': 'error',
     'quote-props': 'off',
-    'quotes': 0,
-    'radix': 'error',
+    quotes: 0,
+    radix: 'error',
     'rest-spread-spacing': 'off',
     'semi-spacing': 'off',
     'semi-style': 'off',
-    'semi': 'off',
+    semi: 'off',
     'space-after-function-name': 'off',
     'space-after-keywords': 'off',
     'space-before-blocks': 'off',
@@ -208,7 +221,7 @@ export default {
     'no-restricted-properties': 'off',
     'no-script-url': 'warn',
     'no-void': 'warn',
-  }
+  },
 };
 
 export const react = {
@@ -243,7 +256,7 @@ export const react = {
   'react/jsx-one-expression-per-line': 'off',
   'react/jsx-space-before-closing': 'off',
   'react/jsx-tag-spacing': 'off',
-  'react/jsx-wrap-multilines': 'off'
+  'react/jsx-wrap-multilines': 'off',
 };
 
 export const flow = {
@@ -259,5 +272,5 @@ export const flow = {
   'flowtype/space-after-type-colon': 'off',
   'flowtype/space-before-generic-bracket': 'off',
   'flowtype/space-before-type-colon': 'off',
-  'flowtype/union-intersection-spacing': 'off'
+  'flowtype/union-intersection-spacing': 'off',
 };
