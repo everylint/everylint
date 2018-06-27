@@ -10,7 +10,8 @@
     "lint": "node ./bin/everylint .",
     "test": "npm run lint",
     "compile": "babel -d lib src",
-    "compile:watch": "npm run compile -- --watch"
+    "compile:watch": "npm run compile -- --watch",
+    "format": "prettier --write '**/*.{js,json,md}'"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -48,6 +49,20 @@
     "babel-eslint": "^8.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "husky": "^1.0.0-rc.9",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.6"
+  },
+  "lint-staged": {
+    "**/*.{js,json,md}": [
+      "npm run format",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
