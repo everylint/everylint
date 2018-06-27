@@ -7,7 +7,7 @@ module.exports = {
   markdown: {
     // ...
   },
-  styles: {
+  style: {
     // ...
   }
 }

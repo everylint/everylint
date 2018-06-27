@@ -15,7 +15,20 @@ export default class HTMLLinter {
   async lint(file) {
     const report = this.linter(file.toString());
 
-    report.forEach(({ message, line, col: column, rule: { id: ruleId }, type }) => {
+    report.forEach((problem) => {
+      const { message, line, col: column, rule: { id: ruleId }, type } = problem;
+      // { type: 'error',
+      //   message: 'Doctype must be declared first.',
+      //   raw: 'asdf\n',
+      //   evidence: 'asdf',
+      //   line: 1,
+      //   col: 1,
+      //   rule:
+      //    { id: 'doctype-first',
+      //      description: 'Doctype must be declared first.',
+      //      link: 'https://github.com/yaniswang/HTMLHint/wiki/doctype-first' } }
+
+
       if (type === 'error') {
         file.error(message, { line, column }, ruleId);
       } else {
