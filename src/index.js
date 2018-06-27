@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import cosmiconfig from 'cosmiconfig';
 import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
@@ -17,11 +18,10 @@ function readFile(path) {
 
 function createTypesMatcher(linters) {
   return (file) => {
-    const meta = Object.entries(linters)
-      .reduce((metas, [name, linter]) => ({
-        ...metas,
-        [name]: linter.matchType(file),
-      }), {});
+    const meta = _.reduce(linters, (metas, linter, name) => ({
+      ...metas,
+      [name]: linter.matchType(file),
+    }), {});
 
     file.data = { ...file.data, ...meta };
 
