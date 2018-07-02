@@ -13,7 +13,7 @@ export default class StyleLinter {
       });
   }
 
-  matchType(file) {
+  matchFile(file) {
     const types = [
       '.css',
       '.pcss',
@@ -26,8 +26,8 @@ export default class StyleLinter {
       '.markdown',
       '.md',
       '.mdown',
-      'mkdn',
-      'js',
+      '.mkdn',
+      '.js',
       '.jsx',
     ];
     return types.includes(file.extname);
@@ -40,7 +40,6 @@ export default class StyleLinter {
     } = await this.linter(file.toString(), file.path);
 
     if (errored) {
-      // result.warnings.forEach(({ text, line, column, rule, severity }) => {
       result.warnings.forEach(problem => {
         const { text, line, column, rule, severity } = problem;
         // { line: 2,

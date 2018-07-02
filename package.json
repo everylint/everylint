@@ -38,8 +38,9 @@
     "pify": "^3.0.0",
     "remark": "^9.0.0",
     "remark-preset-lint-markdown-style-guide": "^2.1.1",
-    "stylelint": "^9.2.0",
-    "vfile-reporter": "^5.0.0"
+    "stylelint": "^9.3.0",
+    "vfile-reporter": "^5.0.0",
+    "vfile-statistics": "^1.1.1"
   },
   "optionalDependencies": {
     "stylelint-config-standard": "^18.2.0"
@@ -50,9 +51,10 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "husky": "^1.0.0-rc.9",
+    "husky": "^1.0.0-rc.10",
     "lint-staged": "^7.2.0",
-    "prettier": "^1.13.6"
+    "prettier": "^1.13.7",
+    "update-notifier": "^2.5.0"
   },
   "lint-staged": {
     "**/*.{js,json,md}": [

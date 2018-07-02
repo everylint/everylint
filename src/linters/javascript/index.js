@@ -14,7 +14,7 @@ export default class JavaScriptLinter {
     this.linter = new CLIEngine({ ...defaultConfig, ...config });
   }
 
-  matchType(file) {
+  matchFile(file) {
     const types = [
       '.js',
       '.markdown',

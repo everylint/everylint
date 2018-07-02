@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import cosmiconfig from 'cosmiconfig';
+import globby from 'globby';
 import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
 import defaultLinters from './linters';
 
-function loadLinters(config) {
+export function loadLinters(config) {
   return defaultLinters.reduce(
     (linters, Linter) => ({
       ...linters,
@@ -14,63 +15,75 @@ function loadLinters(config) {
   );
 }
 
-function readFile(path) {
-  return SourceFile.readFileSync(path);
-}
-
-function createTypesMatcher(linters) {
+export function createTypesMatcher(linters) {
   return file => {
-    const meta = _.reduce(
+    file.data.types = _.reduce(
       linters,
       (metas, linter, name) => ({
         ...metas,
-        [name]: linter.matchType(file),
+        [name]: linter.matchFile(file),
       }),
       {},
     );
-
-    file.data = { ...file.data, ...meta };
 
     return file;
   };
 }
 
-function createFilesLinter(linters) {
-  return file => {
-    const jobs = Object.entries(file.data)
-      .filter(([type, enabled]) => enabled)
-      .map(([type]) => type)
-      .reduce(async (promise, type) => {
-        const file = await promise;
-        return linters[type].lint(file);
-      }, Promise.resolve(file));
+export function composeLinters(linters) {
+  return async file => {
+    const fileTypes = file.data.types;
+    const filteredTypes = _.pickBy(fileTypes, enabled => enabled);
+    const types = _.keys(filteredTypes);
 
-    return Promise.resolve(jobs);
+    const linter = await types.reduce(
+      async (file, type) => linters[type].lint(await file),
+      await file,
+    );
+
+    return linter;
   };
 }
 
-async function resolveConfig() {
+// ----- NEW API -----
+
+export async function resolveConfig() {
   return await cosmiconfig('everylint').search();
 }
 
-export default async function run(filenames) {
+export async function lintText(contents, options) {
+  if (typeof contents !== 'string') {
+    throw new TypeError(
+      `A string is expected, but recieved ${typeof contents}`,
+    );
+  }
+
+  // const file = new SourceFile({ contents })
+}
+
+export async function lintFiles(files, options) {
+  // Wrap file in array and lint
   const { config } = await resolveConfig();
   const linters = loadLinters(config);
   const matchTypes = createTypesMatcher(linters);
-  const lintFiles = createFilesLinter(linters);
+  const linter = composeLinters(linters);
 
-  // TODO: Create an abstraction, like SourceFile extending VFile
-  const tasks = filenames
-    // Read files, convert them to VFile
-    .map(file => readFile(file))
-    // Custom types
-    .map(file => matchTypes(file))
-    .map(file => lintFiles(file));
+  const filenames = await globby([].concat(files), {
+    // ignore: additionaly ignored files
+    gitignore: true,
+    // cwd: <cwd>
+  });
 
-  try {
-    const report = await Promise.all(tasks);
-    console.log(reporter(report));
-  } catch (error) {
-    console.error(error);
-  }
+  const jobs = filenames
+    .map(SourceFile.readFileSync)
+    .map(matchTypes)
+    .map(linter);
+
+  const report = await Promise.all(jobs);
+
+  return processReport(report);
+}
+
+export function processReport(report) {
+  console.log(reporter(report));
 }

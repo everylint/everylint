@@ -7,7 +7,7 @@ export default class HTMLLinter {
     this.linter = content => HTMLHint.verify(content);
   }
 
-  matchType(file) {
+  matchFile(file) {
     const types = ['.html'];
     return types.includes(file.extname);
   }

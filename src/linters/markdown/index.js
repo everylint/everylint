@@ -8,7 +8,7 @@ export default class MarkdownLinter {
     this.linter = remark().use(styleGuide);
   }
 
-  matchType(file) {
+  matchFile(file) {
     const types = ['.md', '.markdown', '.mdown', '.mkdn'];
     return types.includes(file.extname);
   }
