@@ -15,6 +15,7 @@ export default class SourceFile extends VFile {
     return new SourceFile({ path, contents });
   }
 
+  // TODO: Pass either object or regular arguments
   warning(...args) {
     return super.message.apply(this, args);
   }

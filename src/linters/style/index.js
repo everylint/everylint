@@ -47,7 +47,8 @@ export default class StyleLinter {
         //   rule: 'property-no-unknown',
         //   severity: 'error',
         //   text: 'Unexpected unknown property "asdfasdfas" (property-no-unknown)' }
-        file[severity](text, { line, column }, rule);
+        const origin = `${this.constructor.type}:${rule}`;
+        file[severity](text, { line, column }, origin);
       });
     }
 

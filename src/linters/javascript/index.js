@@ -45,9 +45,9 @@ export default class JavaScriptLinter {
       //  endColumn - the end column of the range on which the error occurred (this property is omitted if it’s not range).
       //  endLine - the end line of the range on which the error occurred (this property is omitted if it’s not range).
       //  fix - an object describing the fix for the problem (this property is omitted if no fix is available).
-
+      const origin = `${this.constructor.type}:${ruleId}`;
       const level = fatalities[severity];
-      file[level](message, { line, column }, ruleId);
+      file[level](message, { line, column }, origin);
     });
 
     return file;

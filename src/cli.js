@@ -1,6 +1,6 @@
 import meow from 'meow';
 import updateNotifier from 'update-notifier';
-import { lintFiles } from '.';
+import * as everylint from '.';
 
 function handleUnexpectedError(err) {
   console.error('\nOops! Something went wrong! :(');
@@ -20,7 +20,10 @@ const help = `
     $ everylint [<file|glob> ...]
 
   Options:
-    --
+    --config or --find-config-path
+    --ignore-path
+    --no-config
+    --stdin-filepath
 
   Examples:
     $ everylint
@@ -35,6 +38,13 @@ const cli = meow({
     fix: {
       type: 'boolean',
     },
+    stdin: {
+      type: 'boolean',
+    },
+    stdinFilename: {
+      type: 'string',
+      alias: 'filename',
+    },
   },
 });
 
@@ -42,7 +52,19 @@ updateNotifier({ pkg: cli.pkg }).notify();
 
 const { input, flags: options } = cli;
 
-lintFiles(input).then(report => console.log(report));
+everylint.lintFiles(input, options).then(report => console.log(report));
+
+// everylint.lintText(`
+//   asdfasdf {
+//     asdfasdfas:asdfasdf;
+//   }
+// `, {
+//   filename: 'foo.css',
+//   linters: {
+//     javascript: true,
+//   },
+// })
+//   .then(report => console.log(report));
 
 // // Collect errors for files that does not exist
 // filenames.forEach(filename => {

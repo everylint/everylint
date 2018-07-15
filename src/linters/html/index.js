@@ -34,10 +34,12 @@ export default class HTMLLinter {
       //      description: 'Doctype must be declared first.',
       //      link: 'https://github.com/yaniswang/HTMLHint/wiki/doctype-first' } }
 
+      const origin = `${this.constructor.type}:${ruleId}`;
+
       if (type === 'error') {
-        file.error(message, { line, column }, ruleId);
+        file.error(message, { line, column }, origin);
       } else {
-        file.warning(message, { line, column }, ruleId);
+        file.warning(message, { line, column }, origin);
       }
     });
 

@@ -9,7 +9,7 @@ export function loadLinters(config) {
   return defaultLinters.reduce(
     (linters, Linter) => ({
       ...linters,
-      [Linter.type]: new Linter(config[Linter.type]),
+      [Linter.type]: new Linter(config.linters[Linter.type]),
     }),
     {},
   );
@@ -45,6 +45,18 @@ export function composeLinters(linters) {
   };
 }
 
+/**
+ * {
+ *   filename: '', // filename for stdin
+ *   noConfig: false, // should resolveConfig internaly
+ *   linters: {}, // defaultLinters
+ * }
+ */
+function processOptions(options) {
+  console.log(options);
+  return options;
+}
+
 // ----- NEW API -----
 
 export async function resolveConfig() {
@@ -52,23 +64,31 @@ export async function resolveConfig() {
 }
 
 export async function lintText(contents, options) {
-  if (typeof contents !== 'string') {
-    throw new TypeError(
-      `A string is expected, but recieved ${typeof contents}`,
-    );
-  }
+  const file = new SourceFile({ path: options.filename, contents });
 
-  // const file = new SourceFile({ contents })
-}
-
-export async function lintFiles(files, options) {
-  // Wrap file in array and lint
+  // FIXME: Duplication
   const { config } = await resolveConfig();
   const linters = loadLinters(config);
   const matchTypes = createTypesMatcher(linters);
   const linter = composeLinters(linters);
+  // FIXME: Duplication
 
-  const filenames = await globby([].concat(files), {
+  const report = await linter(matchTypes(file));
+
+  return processReport([report]);
+}
+
+export async function lintFiles(files, options) {
+  console.log(options);
+  // FIXME: Duplication
+  const { config } = await resolveConfig();
+  const linters = loadLinters(config);
+  const matchTypes = createTypesMatcher(linters);
+  const linter = composeLinters(linters);
+  // FIXME: Duplication
+
+  const glob = [].concat(files);
+  const filenames = await globby(glob, {
     // ignore: additionaly ignored files
     gitignore: true,
     // cwd: <cwd>
