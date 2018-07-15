@@ -49,6 +49,8 @@ export function composeLinters(linters) {
  * {
  *   filename: '', // filename for stdin
  *   noConfig: false, // should resolveConfig internaly
+ *   configPath: '',
+ *   ignorePath: '', // TODO: Add ability to ignore files
  *   linters: {}, // defaultLinters
  * }
  */
@@ -63,29 +65,29 @@ export async function resolveConfig() {
   return await cosmiconfig('everylint').search();
 }
 
-export async function lintText(contents, options) {
-  const file = new SourceFile({ path: options.filename, contents });
+export async function lint(sourceFile, config) {
+  const sourceFiles = [].concat(sourceFile);
 
-  // FIXME: Duplication
-  const { config } = await resolveConfig();
   const linters = loadLinters(config);
   const matchTypes = createTypesMatcher(linters);
   const linter = composeLinters(linters);
-  // FIXME: Duplication
 
-  const report = await linter(matchTypes(file));
+  const lintedFiles = sourceFiles.map(file => linter(matchTypes(file)));
 
-  return processReport([report]);
+  const report = await Promise.all(lintedFiles);
+
+  return processReport(report);
+}
+
+export async function lintText(contents, options) {
+  const file = new SourceFile({ path: options.filename, contents });
+  const { config } = await resolveConfig();
+
+  return lint(file, config);
 }
 
 export async function lintFiles(files, options) {
-  console.log(options);
-  // FIXME: Duplication
   const { config } = await resolveConfig();
-  const linters = loadLinters(config);
-  const matchTypes = createTypesMatcher(linters);
-  const linter = composeLinters(linters);
-  // FIXME: Duplication
 
   const glob = [].concat(files);
   const filenames = await globby(glob, {
@@ -94,16 +96,12 @@ export async function lintFiles(files, options) {
     // cwd: <cwd>
   });
 
-  const jobs = filenames
-    .map(SourceFile.readFileSync)
-    .map(matchTypes)
-    .map(linter);
+  const sourceFiles = filenames.map(SourceFile.readFileSync);
 
-  const report = await Promise.all(jobs);
-
-  return processReport(report);
+  return lint(sourceFiles, config);
 }
 
 export function processReport(report) {
+  console.log(report);
   console.log(reporter(report));
 }
