@@ -6,25 +6,20 @@ import SourceFile from './source-file';
 import defaultLinters from './linters';
 
 export function loadLinters(config) {
-  return defaultLinters.reduce(
-    (linters, Linter) => ({
-      ...linters,
-      [Linter.type]: new Linter(config.linters[Linter.type]),
-    }),
-    {},
-  );
+  const linters = {};
+
+  for (let Linter of defaultLinters) {
+    linters[Linter.type] = new Linter(config.linters[Linter.type]);
+  }
+
+  return linters;
 }
 
 export function createTypesMatcher(linters) {
   return file => {
-    file.types = _.reduce(
-      linters,
-      (metas, linter, name) => ({
-        ...metas,
-        [name]: linter.matchFile(file),
-      }),
-      {},
-    );
+    for (let [name, linter] of Object.entries(linters)) {
+      file.types[name] = linter.matchFile(file);
+    }
 
     return file;
   };
@@ -50,9 +45,19 @@ export async function resolveConfig() {
 }
 
 // TODO: process config
-function processOptions(options) {
-  console.log('processOptions', options);
-  return options;
+export async function processOptions(options) {
+  console.log('incomming options', options);
+  // const { config } = await resolveConfig();
+
+  const defaultConfig = {
+    linters: {}, // linter's configuration
+    stdin: true, // is stdin used or not
+    filename: '',
+    // fix: false, // disabled since it's not supported yet.
+    open: false, // open file in editor
+  };
+
+  return { ...defaultConfig, /*...config, */ ...options };
 }
 
 export async function lint(sourceFile, config) {
@@ -71,13 +76,13 @@ export async function lint(sourceFile, config) {
 
 export async function lintText(contents, options) {
   const file = new SourceFile({ path: options.filename, contents });
-  const { config } = await resolveConfig();
+  const config = await processOptions(options);
 
   return lint(file, config);
 }
 
 export async function lintFiles(files, options) {
-  const { config } = await resolveConfig();
+  const config = await processOptions(options);
 
   const glob = [].concat(files);
   const filenames = await globby(glob, {
