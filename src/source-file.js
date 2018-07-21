@@ -15,12 +15,38 @@ export default class SourceFile extends VFile {
     return new SourceFile({ path, contents });
   }
 
+  types = {};
+
+  statistic = {
+    errors: 0,
+    warnings: 0,
+    info: 0,
+    total: 0,
+  };
+
   // TODO: Pass either object or regular arguments
-  warning(...args) {
+  message(...args) {
+    this.statistic.warnings += 1;
+    this.statistic.total += 1;
+
     return super.message.apply(this, args);
   }
 
+  warning(...args) {
+    return this.message(...args);
+  }
+
+  info(...args) {
+    this.statistic.info += 1;
+    this.statistic.total += 1;
+
+    return super.info.apply(this, args);
+  }
+
   error(...args) {
+    this.statistic.errors += 1;
+    this.statistic.total += 1;
+
     try {
       super.fail.apply(this, args);
     } catch (message) {

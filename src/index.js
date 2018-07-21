@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import cosmiconfig from 'cosmiconfig';
 import globby from 'globby';
-import SourceFile from './source-file';
 import reporter from 'vfile-reporter';
+import SourceFile from './source-file';
 import defaultLinters from './linters';
 
 export function loadLinters(config) {
@@ -17,7 +17,7 @@ export function loadLinters(config) {
 
 export function createTypesMatcher(linters) {
   return file => {
-    file.data.types = _.reduce(
+    file.types = _.reduce(
       linters,
       (metas, linter, name) => ({
         ...metas,
@@ -32,7 +32,7 @@ export function createTypesMatcher(linters) {
 
 export function composeLinters(linters) {
   return async file => {
-    const fileTypes = file.data.types;
+    const fileTypes = file.types;
     const filteredTypes = _.pickBy(fileTypes, enabled => enabled);
     const types = _.keys(filteredTypes);
 
@@ -45,24 +45,14 @@ export function composeLinters(linters) {
   };
 }
 
-/**
- * {
- *   filename: '', // filename for stdin
- *   noConfig: false, // should resolveConfig internaly
- *   configPath: '',
- *   ignorePath: '', // TODO: Add ability to ignore files
- *   linters: {}, // defaultLinters
- * }
- */
-function processOptions(options) {
-  console.log(options);
-  return options;
-}
-
-// ----- NEW API -----
-
 export async function resolveConfig() {
   return await cosmiconfig('everylint').search();
+}
+
+// TODO: process config
+function processOptions(options) {
+  console.log('processOptions', options);
+  return options;
 }
 
 export async function lint(sourceFile, config) {
@@ -76,7 +66,7 @@ export async function lint(sourceFile, config) {
 
   const report = await Promise.all(lintedFiles);
 
-  return processReport(report);
+  return mergeReports(report);
 }
 
 export async function lintText(contents, options) {
@@ -96,12 +86,31 @@ export async function lintFiles(files, options) {
     // cwd: <cwd>
   });
 
-  const sourceFiles = filenames.map(SourceFile.readFileSync);
+  const sourceFiles = await Promise.all(filenames.map(SourceFile.readFile));
 
   return lint(sourceFiles, config);
 }
 
-export function processReport(report) {
-  console.log(report);
-  console.log(reporter(report));
+export function mergeReports(reports) {
+  let results = [];
+  let statistic = {
+    errors: 0,
+    warnings: 0,
+    info: 0,
+    total: 0,
+  };
+
+  for (let result of reports) {
+    results = [...results, result];
+    statistic = _.mergeWith(statistic, result.statistic, (a, b) => a + b);
+  }
+
+  return {
+    results,
+    statistic,
+  };
+}
+
+export function printReport(report) {
+  return reporter(report.results);
 }

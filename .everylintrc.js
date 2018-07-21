@@ -1,13 +1,15 @@
 module.exports = {
-  javascript: {
-    rules: {
-      semi: 2,
+  linters: {
+    javascript: {
+      rules: {
+        semi: 2,
+      },
     },
-  },
-  markdown: {
-    // ...
-  },
-  style: {
-    // ...
+    markdown: {
+      // ...
+    },
+    style: {
+      // ...
+    },
   },
 };
