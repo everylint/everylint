@@ -1,6 +1,7 @@
 import meow from 'meow';
 import updateNotifier from 'update-notifier';
 import * as everylint from '.';
+import init from './init';
 
 function handleUnexpectedError(err) {
   console.error('\nOops! Something went wrong! :(');
@@ -10,9 +11,6 @@ function handleUnexpectedError(err) {
 
 process.once('uncaughtException', handleUnexpectedError);
 process.once('unhandledRejection', handleUnexpectedError);
-
-// Array of possible errors
-// const errors = [];
 
 // TODO: Add more options to program
 const help = `
@@ -36,9 +34,18 @@ const cli = meow({
   booleanDefault: undefined,
   flags: {
     fix: {
+      // TODO: Fix sources with --fix
+      type: 'boolean',
+    },
+    init: {
+      type: 'boolean',
+    },
+    open: {
+      // TODO: Open files in text editors
       type: 'boolean',
     },
     stdin: {
+      // TODO: Read input from stdin with --stdin
       type: 'boolean',
     },
     stdinFilename: {
@@ -52,34 +59,34 @@ updateNotifier({ pkg: cli.pkg }).notify();
 
 const { input, flags: options } = cli;
 
-everylint.lintFiles(input, options).then(report => console.log(report));
+if (options.init) {
+  init();
+}
 
-// everylint.lintText(`
-//   asdfasdf {
-//     asdfasdfas:asdfasdf;
-//   }
-// `, {
-//   filename: 'foo.css',
-//   linters: {
-//     javascript: true,
-//   },
-// })
-//   .then(report => console.log(report));
+// `everylint -` -> `everylint --stdin`
+if (input[0] === '-') {
+  opts.stdin = true;
+  input.shift();
+}
 
-// // Collect errors for files that does not exist
-// filenames.forEach(filename => {
-//   if (!fs.existsSync(filename)) {
-//     errors.push(filename + ' does not exist!');
-//   }
-// });
+if (options.stdin) {
+  if (!options.filename) {
+    console.log('Filename is required for stdin');
+    process.exit(1);
+  }
 
-// // If there's nothing to lint, create an error
-// if (filenames.length === 0) {
-//   errors.push('No files to lint!');
-// }
+  // FIXME: Get stdin;
+  const stdin = '';
 
-// // If there are some errors, exit the process
-// if (errors.length) {
-//   console.error(errors.join('\n'));
-//   process.exit(2);
-// }
+  everylint.lintText(stdin, options).then(report => {
+    const exitCode = report.statistic.errors === 0 ? 0 : 1;
+    process.stdout.write(everylint.printReport(report));
+    process.exit(exitCode);
+  });
+} else {
+  everylint.lintFiles(input, options).then(report => {
+    const exitCode = report.statistic.errors === 0 ? 0 : 1;
+    process.stdout.write(everylint.printReport(report));
+    process.exit(exitCode);
+  });
+}
