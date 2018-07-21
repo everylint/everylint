@@ -33,6 +33,23 @@ const cli = meow({
   help,
   booleanDefault: undefined,
   flags: {
+    quiet: {
+      // Show only errors and no warnings
+      type: 'boolean',
+    },
+    cwd: {
+      // current working directory
+      type: 'string',
+    },
+    configPath: {
+      type: 'string',
+    },
+    noConfig: {
+      type: 'boolean',
+    },
+    ignorePath: {
+      type: 'string',
+    },
     fix: {
       // TODO: Fix sources with --fix
       type: 'boolean',
@@ -48,9 +65,9 @@ const cli = meow({
       // TODO: Read input from stdin with --stdin
       type: 'boolean',
     },
-    stdinFilename: {
+    filename: {
       type: 'string',
-      alias: 'filename',
+      alias: 'stdinFilename',
     },
   },
 });
@@ -69,6 +86,12 @@ if (input[0] === '-') {
   input.shift();
 }
 
+function exitWithReport(report) {
+  const exitCode = report.statistic.errors === 0 ? 0 : 1;
+  process.stdout.write(everylint.printReport(report));
+  process.exit(exitCode);
+}
+
 if (options.stdin) {
   if (!options.filename) {
     console.log('Filename is required for stdin');
@@ -78,15 +101,7 @@ if (options.stdin) {
   // FIXME: Get stdin;
   const stdin = '';
 
-  everylint.lintText(stdin, options).then(report => {
-    const exitCode = report.statistic.errors === 0 ? 0 : 1;
-    process.stdout.write(everylint.printReport(report));
-    process.exit(exitCode);
-  });
+  everylint.lintText(stdin, options).then(exitWithReport);
 } else {
-  everylint.lintFiles(input, options).then(report => {
-    const exitCode = report.statistic.errors === 0 ? 0 : 1;
-    process.stdout.write(everylint.printReport(report));
-    process.exit(exitCode);
-  });
+  everylint.lintFiles(input, options).then(exitWithReport);
 }
