@@ -59,24 +59,30 @@ export function composeLinters(linters) {
   };
 }
 
-export async function resolveConfig() {
-  return await cosmiconfig('everylint').search();
+export function resolveConfigFile() {
+  const explorer = cosmiconfig('everylint');
+  return explorer.search();
 }
 
-// TODO: process config
 export async function processOptions(options) {
-  console.log('incomming options', options);
-  // const { config } = await resolveConfig();
+  const configFile = await resolveConfigFile();
 
   const defaultConfig = {
-    linters: {}, // linter's configuration
-    stdin: true, // is stdin used or not
-    filename: '',
+    // Current working directory
+    cwd: process.cwd(),
+    // Show only errors and no warnings
+    quite: false,
+    // Linter's configuration
+    linters: {},
+    filename: null,
     // fix: false, // disabled since it's not supported yet.
-    open: false, // open file in editor
   };
 
-  return { ...defaultConfig, /*...config, */ ...options };
+  return {
+    ...defaultConfig,
+    ...(configFile ? configFile.config : {}),
+    ...options,
+  };
 }
 
 export async function lint(sourceFile, config) {
@@ -105,7 +111,7 @@ export async function lintFiles(files, options) {
 
   const glob = [].concat(files);
   const filenames = await globby(glob, {
-    // ignore: additionaly ignored files
+    // ignore: additionally ignored files
     gitignore: true,
     // cwd: <cwd>
   });

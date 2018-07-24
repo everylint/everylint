@@ -34,11 +34,9 @@ const cli = meow({
   booleanDefault: undefined,
   flags: {
     quiet: {
-      // Show only errors and no warnings
       type: 'boolean',
     },
     cwd: {
-      // current working directory
       type: 'string',
     },
     configPath: {
@@ -51,18 +49,15 @@ const cli = meow({
       type: 'string',
     },
     fix: {
-      // TODO: Fix sources with --fix
       type: 'boolean',
     },
     init: {
       type: 'boolean',
     },
     open: {
-      // TODO: Open files in text editors
       type: 'boolean',
     },
     stdin: {
-      // TODO: Read input from stdin with --stdin
       type: 'boolean',
     },
     filename: {
