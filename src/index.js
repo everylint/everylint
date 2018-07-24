@@ -5,11 +5,30 @@ import reporter from 'vfile-reporter';
 import SourceFile from './source-file';
 import defaultLinters from './linters';
 
+function requireLinter(name) {
+  try {
+    return require(`everylint-linter-${name}`);
+  } catch (err) {
+    if (name in defaultLinters) {
+      return defaultLinters[name];
+    }
+    // FIXME: throw an error
+    // throw new Error(`Cannot require \`everylint-linter-${name}\`!`);
+    return console.error(`Cannot require \`everylint-linter-${name}\`!`);
+  }
+}
+
 export function loadLinters(config) {
+  const modules = _.union(
+    Object.keys(config.linters),
+    Object.keys(defaultLinters),
+  ).filter(name => config.linters[name] !== null);
+
   const linters = {};
 
-  for (let Linter of defaultLinters) {
-    linters[Linter.type] = new Linter(config.linters[Linter.type]);
+  for (let name of modules) {
+    const Linter = requireLinter(name);
+    linters[name] = new Linter(config.linters[name]);
   }
 
   return linters;

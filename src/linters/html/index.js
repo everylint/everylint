@@ -1,8 +1,6 @@
 import { HTMLHint } from 'htmlhint';
 
 export default class HTMLLinter {
-  static type = 'html';
-
   constructor(/* config */) {
     this.linter = content => HTMLHint.verify(content);
   }
@@ -34,7 +32,7 @@ export default class HTMLLinter {
       //      description: 'Doctype must be declared first.',
       //      link: 'https://github.com/yaniswang/HTMLHint/wiki/doctype-first' } }
 
-      const origin = `${this.constructor.type}:${ruleId}`;
+      const origin = `html:${ruleId}`;
 
       if (type === 'error') {
         file.error(message, { line, column }, origin);

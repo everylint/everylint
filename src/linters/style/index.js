@@ -2,8 +2,6 @@ import stylelint from 'stylelint';
 import baseConfig from './config';
 
 export default class StyleLinter {
-  static type = 'style';
-
   constructor(/* config */) {
     this.linter = (content, path) =>
       stylelint.lint({
@@ -47,7 +45,7 @@ export default class StyleLinter {
         //   rule: 'property-no-unknown',
         //   severity: 'error',
         //   text: 'Unexpected unknown property "asdfasdfas" (property-no-unknown)' }
-        const origin = `${this.constructor.type}:${rule}`;
+        const origin = `styles:${rule}`;
         file[severity](text, { line, column }, origin);
       });
     }
