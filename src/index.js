@@ -5,6 +5,11 @@ import reporter from 'vfile-reporter';
 import SourceFile from './source-file';
 import defaultLinters from './linters';
 
+/**
+ * Attempt to require a linter module or load a default one.
+ *
+ * @param {string} name
+ */
 function requireLinter(name) {
   try {
     return require(`everylint-linter-${name}`);
@@ -12,12 +17,15 @@ function requireLinter(name) {
     if (name in defaultLinters) {
       return defaultLinters[name];
     }
-    // FIXME: throw an error
-    // throw new Error(`Cannot require \`everylint-linter-${name}\`!`);
-    return console.error(`Cannot require \`everylint-linter-${name}\`!`);
+    throw new Error(`Cannot require \`everylint-linter-${name}\`!`);
   }
 }
 
+/**
+ * Merge default and custom linters, load and init them.
+ *
+ * @param {object} config
+ */
 export function loadLinters(config) {
   const modules = _.union(
     Object.keys(config.linters),
@@ -34,6 +42,13 @@ export function loadLinters(config) {
   return linters;
 }
 
+/**
+ * Creates a type matcher.
+ * Type matcher is a function that matches file against linter's
+ * condition in matchFile method.
+ *
+ * @param {object} linters
+ */
 export function createTypesMatcher(linters) {
   return file => {
     for (let [name, linter] of Object.entries(linters)) {
@@ -44,6 +59,12 @@ export function createTypesMatcher(linters) {
   };
 }
 
+/**
+ * Takes linters and returns a linting function,
+ * which is a composition of linters matched agains the file.
+ *
+ * @param {object} linters
+ */
 export function composeLinters(linters) {
   return async file => {
     const fileTypes = file.types;
@@ -59,12 +80,22 @@ export function composeLinters(linters) {
   };
 }
 
+/**
+ * Resolve and load configuration file.
+ */
 export function resolveConfigFile() {
   const explorer = cosmiconfig('everylint');
   return explorer.search();
 }
 
+/**
+ * Takes options, resolves custom and default configs.
+ *
+ * @param {object} options
+ */
 export async function processOptions(options) {
+  // TODO: Add checks for filename, stdin an so on
+
   const configFile = await resolveConfigFile();
 
   const defaultConfig = {
@@ -73,7 +104,9 @@ export async function processOptions(options) {
     // Show only errors and no warnings
     quite: false,
     // Linter's configuration
-    linters: {},
+    linters: {
+      // Add default linters here
+    },
     filename: null,
     // fix: false, // disabled since it's not supported yet.
   };
@@ -85,20 +118,32 @@ export async function processOptions(options) {
   };
 }
 
+/**
+ * Takes source file and validated config.
+ * Returns report.
+ *
+ * @param {SourceFile} sourceFile
+ * @param {object} config
+ */
 export async function lint(sourceFile, config) {
   const sourceFiles = [].concat(sourceFile);
 
   const linters = loadLinters(config);
   const matchTypes = createTypesMatcher(linters);
   const linter = composeLinters(linters);
-
   const lintedFiles = sourceFiles.map(file => linter(matchTypes(file)));
-
   const report = await Promise.all(lintedFiles);
 
   return mergeReports(report);
 }
 
+/**
+ * Takes string or buffer and options.
+ * Returns result of linting.
+ *
+ * @param {string} contents
+ * @param {object} options
+ */
 export async function lintText(contents, options) {
   const file = new SourceFile({ path: options.filename, contents });
   const config = await processOptions(options);
@@ -106,6 +151,13 @@ export async function lintText(contents, options) {
   return lint(file, config);
 }
 
+/**
+ * Takes glob/path and options.
+ * Returns result of linting.
+ *
+ * @param {string} files
+ * @param {object} options
+ */
 export async function lintFiles(files, options) {
   const config = await processOptions(options);
 
@@ -121,6 +173,11 @@ export async function lintFiles(files, options) {
   return lint(sourceFiles, config);
 }
 
+/**
+ * Takes array of reports. Returns merged report.
+ *
+ * @param {array} reports
+ */
 export function mergeReports(reports) {
   let results = [];
   let statistic = {
@@ -141,6 +198,11 @@ export function mergeReports(reports) {
   };
 }
 
+/**
+ * Takes merged report. Prints report to console.
+ *
+ * @param {object} report
+ */
 export function printReport(report) {
   return reporter(report.results);
 }

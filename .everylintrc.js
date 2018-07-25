@@ -5,11 +5,5 @@ module.exports = {
         semi: 2,
       },
     },
-    markdown: {
-      // ...
-    },
-    style: {
-      // ...
-    },
   },
 };
