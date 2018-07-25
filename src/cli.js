@@ -81,6 +81,10 @@ if (input[0] === '-') {
   input.shift();
 }
 
+if (!input.length) {
+  input[0] = '.';
+}
+
 function exitWithReport(report) {
   const exitCode = report.statistic.errors === 0 ? 0 : 1;
   process.stdout.write(everylint.printReport(report));
