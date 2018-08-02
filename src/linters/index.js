@@ -1,6 +1,6 @@
-import html from './html';
-import javascript from './javascript';
-import markdown from './markdown';
-import style from './style';
+const html = require('./html');
+const javascript = require('./javascript');
+const markdown = require('./markdown');
+const style = require('./style');
 
-export default { html, javascript, markdown, style };
+module.exports = { html, javascript, markdown, style };

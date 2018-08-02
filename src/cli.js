@@ -1,7 +1,7 @@
-import meow from 'meow';
-import updateNotifier from 'update-notifier';
-import * as everylint from '.';
-import init from './init';
+const meow = require('meow');
+const updateNotifier = require('update-notifier');
+const init = require('./init.js');
+const everylint = require('./index.js');
 
 function handleUnexpectedError(err) {
   console.error('\nOops! Something went wrong! :(');
@@ -77,7 +77,7 @@ if (options.init) {
 
 // `everylint -` -> `everylint --stdin`
 if (input[0] === '-') {
-  opts.stdin = true;
+  options.stdin = true;
   input.shift();
 }
 

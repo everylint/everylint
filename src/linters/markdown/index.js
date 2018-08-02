@@ -1,7 +1,7 @@
-import remark from 'remark';
-import styleGuide from 'remark-preset-lint-markdown-style-guide';
+const remark = require('remark');
+const styleGuide = require('remark-preset-lint-markdown-style-guide');
 
-export default class MarkdownLinter {
+class MarkdownLinter {
   constructor(/* config */) {
     this.linter = remark().use(styleGuide);
   }
@@ -19,3 +19,5 @@ export default class MarkdownLinter {
     // return fixed file
   }
 }
+
+module.exports = MarkdownLinter;

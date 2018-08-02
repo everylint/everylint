@@ -10,4 +10,4 @@ try {
   console.error(error);
 }
 
-export default config;
+module.exports = config;

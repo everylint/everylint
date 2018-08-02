@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import cosmiconfig from 'cosmiconfig';
-import globby from 'globby';
-import reporter from 'vfile-reporter';
-import SourceFile from './source-file';
-import defaultLinters from './linters';
+const _ = require('lodash');
+const cosmiconfig = require('cosmiconfig');
+const globby = require('globby');
+const reporter = require('vfile-reporter');
+const SourceFile = require('./source-file');
+const defaultLinters = require('./linters');
 
 /**
  * Attempt to require a linter module or load a default one.
@@ -26,7 +26,7 @@ function requireLinter(name) {
  *
  * @param {object} config
  */
-export function loadLinters(config) {
+function loadLinters(config) {
   const modules = _.union(
     Object.keys(config.linters),
     Object.keys(defaultLinters),
@@ -49,7 +49,7 @@ export function loadLinters(config) {
  *
  * @param {object} linters
  */
-export function createTypesMatcher(linters) {
+function createTypesMatcher(linters) {
   return file => {
     for (let [name, linter] of Object.entries(linters)) {
       file.types[name] = linter.matchFile(file);
@@ -65,7 +65,7 @@ export function createTypesMatcher(linters) {
  *
  * @param {object} linters
  */
-export function composeLinters(linters) {
+function composeLinters(linters) {
   return async file => {
     const fileTypes = file.types;
     const filteredTypes = _.pickBy(fileTypes, enabled => enabled);
@@ -83,7 +83,7 @@ export function composeLinters(linters) {
 /**
  * Resolve and load configuration file.
  */
-export function resolveConfigFile() {
+function resolveConfigFile() {
   const explorer = cosmiconfig('everylint');
   return explorer.search();
 }
@@ -93,7 +93,7 @@ export function resolveConfigFile() {
  *
  * @param {object} options
  */
-export async function processOptions(options) {
+async function processOptions(options) {
   // TODO: Add checks for filename, stdin an so on
 
   const configFile = await resolveConfigFile();
@@ -125,7 +125,7 @@ export async function processOptions(options) {
  * @param {SourceFile} sourceFile
  * @param {object} config
  */
-export async function lint(sourceFile, config) {
+async function lint(sourceFile, config) {
   const sourceFiles = [].concat(sourceFile);
 
   const linters = loadLinters(config);
@@ -144,7 +144,7 @@ export async function lint(sourceFile, config) {
  * @param {string} contents
  * @param {object} options
  */
-export async function lintText(contents, options) {
+async function lintText(contents, options) {
   const file = new SourceFile({ path: options.filename, contents });
   const config = await processOptions(options);
 
@@ -158,7 +158,7 @@ export async function lintText(contents, options) {
  * @param {string} files
  * @param {object} options
  */
-export async function lintFiles(files, options) {
+async function lintFiles(files, options) {
   const config = await processOptions(options);
 
   const glob = [].concat(files);
@@ -178,7 +178,7 @@ export async function lintFiles(files, options) {
  *
  * @param {array} reports
  */
-export function mergeReports(reports) {
+function mergeReports(reports) {
   let results = [];
   let statistic = {
     errors: 0,
@@ -203,6 +203,19 @@ export function mergeReports(reports) {
  *
  * @param {object} report
  */
-export function printReport(report) {
+function printReport(report) {
   return reporter(report.results);
 }
+
+module.exports = {
+  printReport,
+  mergeReports,
+  lintFiles,
+  lintText,
+  lint,
+  processOptions,
+  resolveConfigFile,
+  composeLinters,
+  loadLinters,
+  createTypesMatcher,
+};

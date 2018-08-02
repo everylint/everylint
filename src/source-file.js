@@ -1,10 +1,10 @@
-import fs from 'fs';
-import promisify from 'pify';
-import VFile from 'vfile';
+const fs = require('fs');
+const promisify = require('pify');
+const VFile = require('vfile');
 
 const fsP = promisify(fs);
 
-export default class SourceFile extends VFile {
+class SourceFile extends VFile {
   static readFileSync(path) {
     const contents = fs.readFileSync(path, 'utf8');
     return new SourceFile({ path, contents });
@@ -15,14 +15,16 @@ export default class SourceFile extends VFile {
     return new SourceFile({ path, contents });
   }
 
-  types = {};
-
-  statistic = {
-    errors: 0,
-    warnings: 0,
-    info: 0,
-    total: 0,
-  };
+  constructor() {
+    super();
+    this.types = {};
+    this.statistic = {
+      errors: 0,
+      warnings: 0,
+      info: 0,
+      total: 0,
+    };
+  }
 
   // TODO: Pass either object or regular arguments
   message(...args) {
@@ -55,3 +57,5 @@ export default class SourceFile extends VFile {
     }
   }
 }
+
+module.exports = SourceFile;

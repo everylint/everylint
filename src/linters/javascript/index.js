@@ -1,5 +1,5 @@
-import { CLIEngine } from 'eslint';
-import defaultConfig from './config';
+const { CLIEngine } = require('eslint');
+const defaultConfig = require('./config').default;
 
 const fatalities = {
   2: 'error',
@@ -7,7 +7,7 @@ const fatalities = {
   0: 'info',
 };
 
-export default class JavaScriptLinter {
+class JavaScriptLinter {
   constructor(config) {
     this.linter = new CLIEngine({ ...defaultConfig, ...config });
   }
@@ -55,3 +55,5 @@ export default class JavaScriptLinter {
     // return fixed file
   }
 }
+
+module.exports = JavaScriptLinter;

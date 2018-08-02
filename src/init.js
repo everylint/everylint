@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { execFileSync } from 'child_process';
-import readPkgUp from 'read-pkg-up';
-import writePkg from 'write-pkg';
+const fs = require('fs');
+const path = require('path');
+const { execFileSync } = require('child_process');
+const readPkgUp = require('read-pkg-up');
+const writePkg = require('write-pkg');
 
 const DEFAULT_TEST_SCRIPT = 'echo "Error: no test specified" && exit 1';
 
@@ -84,7 +84,7 @@ function postInstall(cwd = process.cwd()) {
   );
 }
 
-export default function(
+module.exports = function(
   { cwd, skipInstall } = {
     cwd: process.cwd(),
     skipInstall: false,
@@ -114,4 +114,4 @@ export default function(
   runCommand('npm', ['install', '--save-dev', 'everylint'], { cwd: pkgCwd });
   postInstall(pkgCwd);
   return;
-}
+};
