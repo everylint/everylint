@@ -1,6 +1,6 @@
-import { HTMLHint } from 'htmlhint';
+const { HTMLHint } = require('htmlhint');
 
-export default class HTMLLinter {
+class HTMLLinter {
   constructor(/* config */) {
     this.linter = content => HTMLHint.verify(content);
   }
@@ -48,3 +48,5 @@ export default class HTMLLinter {
     // return fixed file
   }
 }
+
+module.exports = HTMLLinter;

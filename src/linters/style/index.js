@@ -1,7 +1,7 @@
-import stylelint from 'stylelint';
-import baseConfig from './config';
+const stylelint = require('stylelint');
+const baseConfig = require('./config');
 
-export default class StyleLinter {
+class StyleLinter {
   constructor(/* config */) {
     this.linter = (content, path) =>
       stylelint.lint({
@@ -57,3 +57,5 @@ export default class StyleLinter {
     // return fixed file
   }
 }
+
+module.exports = StyleLinter;

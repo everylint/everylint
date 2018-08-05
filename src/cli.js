@@ -1,7 +1,8 @@
-import meow from 'meow';
-import updateNotifier from 'update-notifier';
-import * as everylint from '.';
-import init from './init';
+const meow = require('meow');
+const fs = require('fs');
+const updateNotifier = require('update-notifier');
+const init = require('./init.js');
+const everylint = require('./index.js');
 
 function handleUnexpectedError(err) {
   console.error('\nOops! Something went wrong! :(');
@@ -77,7 +78,7 @@ if (options.init) {
 
 // `everylint -` -> `everylint --stdin`
 if (input[0] === '-') {
-  opts.stdin = true;
+  options.stdin = true;
   input.shift();
 }
 
@@ -98,5 +99,11 @@ if (options.stdin) {
 
   everylint.lintText(stdin, options).then(exitWithReport);
 } else {
-  everylint.lintFiles(input, options).then(exitWithReport);
+  fs.readdir(process.cwd(), (err, files) => {
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+
+    everylint.lintFiles(files, options).then(exitWithReport);
+  });
 }
