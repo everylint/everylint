@@ -15,8 +15,8 @@ class SourceFile extends VFile {
     return new SourceFile({ path, contents });
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.types = {};
     this.statistic = {
       errors: 0,

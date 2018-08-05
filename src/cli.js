@@ -1,4 +1,5 @@
 const meow = require('meow');
+const fs = require('fs');
 const updateNotifier = require('update-notifier');
 const init = require('./init.js');
 const everylint = require('./index.js');
@@ -98,5 +99,11 @@ if (options.stdin) {
 
   everylint.lintText(stdin, options).then(exitWithReport);
 } else {
-  everylint.lintFiles(input, options).then(exitWithReport);
+  fs.readdir(process.cwd(), (err, files) => {
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+
+    everylint.lintFiles(files, options).then(exitWithReport);
+  });
 }
