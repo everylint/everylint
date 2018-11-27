@@ -54,6 +54,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "husky": "^1.0.0-rc.10",
+    "lerna": "^3.4.3",
     "lint-staged": "^7.2.0",
     "prettier": "^1.13.7",
     "update-notifier": "^2.5.0"
@@ -62,6 +63,9 @@
     "**/*.{js,json,md}": [
       "npm run format",
       "git add"
+    ],
+    "package-lock.json": [
+      "git rm --cached"
     ]
   },
   "husky": {

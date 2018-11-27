@@ -1,0 +1,14 @@
+{
+  "version": "0.0.0",
+  "packages": ["packages/*"],
+  "command": {
+    "create": {
+      "homepage": "https://github.com/everylint/everylint",
+      "license": "MIT",
+      "keywords": ["everylint", "javascript", "linter", "js"]
+    },
+    "publish": {
+      "allowBranch": "master"
+    }
+  }
+}
