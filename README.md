@@ -1,21 +1,28 @@
 # Everylint
 
+> A zero-config, unopinionated linting solution to check all frontend parts.
+
 Lint your js, styles, and markdown just with one linter.
 
 Everylint uses [ESLint][eslint], [stylelint][stylelint],
 and [markdownlint][markdownlint].
 
-[![NPM version][npm-img]][npm-url]
+![screen shot 2018-07-25 at 22 43 14](https://user-images.githubusercontent.com/3459374/43223847-0f2c0ec0-905d-11e8-9731-0862c7b4e525.png)
 
-[npm-img]: http://img.shields.io/npm/v/everylint.svg
-[npm-url]: https://www.npmjs.org/package/everylint
+## Motivation
 
-![Everylint show results for all linters for all files to the console report][everylint-demo-img]
+> The real value of ESLint is in the non-style rules that prevent common errors.
+>
+> — [Nicholas C. Zakas](https://twitter.com/slicknet/status/877195619353337856)
 
 ## Install
 
-```bash
-npm install everylint -D
+```sh
+npm install --save-dev everylint
+```
+
+```sh
+yarn add --dev everylint
 ```
 
 If you use own `stylelint` config install without `stylelint-config-standard`,
@@ -26,7 +33,7 @@ npm install everylint -D --no-optional
 
 ## Usage
 
-```bash
+```sh
 npx everylint
 ```
 
@@ -44,16 +51,14 @@ and run,
 npm run lint
 ```
 
----
+## License
 
-Sponsored by
+MIT ©
 
-<a href="https://uploadcare.com/?utm_source=github&utm_campaign=everylint">
-  <img height="64"
-       src="https://ucarecdn.com/74c4d283-f7cf-45d7-924c-fc77345585af/uclogohorizontal.svg"
-       alt="Uploadcare">
-</a>
+<!-- References -->
 
+[npm-img]: http://img.shields.io/npm/v/everylint.svg
+[npm-url]: https://www.npmjs.org/package/everylint
 [eslint]: https://github.com/eslint/eslint
 [stylelint]: https://github.com/stylelint/stylelint
 [markdownlint]: https://github.com/DavidAnson/markdownlint
