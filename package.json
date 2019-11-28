@@ -35,7 +35,6 @@
     "htmlhint": "^0.9.13",
     "lodash": "^4.17.10",
     "meow": "^5.0.0",
-    "pify": "^3.0.0",
     "read-pkg-up": "^4.0.0",
     "remark": "^9.0.0",
     "remark-preset-lint-markdown-style-guide": "^2.1.1",
